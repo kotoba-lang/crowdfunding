@@ -144,7 +144,7 @@ takes it as an argument.
 ## Test
 
 ```bash
-clojure -M:test     # 130 tests, 419 assertions
+clojure -M:test     # 134 tests, 426 assertions
 clojure -M:lint
 ```
 

@@ -1,5 +1,6 @@
 (ns crowdfunding.passthrough-test
   (:require [clojure.test :refer [deftest is testing]]
+            [crowdfunding.fixtures :as fx]
             [crowdfunding.passthrough :as sut]))
 
 ;; Numbers follow ADR-2607268000's MK-1 shape, in JPY minor units (= yen):
@@ -106,6 +107,39 @@
     (is (= 81000000 (:exposure/absorbed-minor e))
         "90000 absorbed on each of 900 units — a rounding error on one order, the company on nine hundred")
     (is (zero? (:exposure/refund-due-minor e)))))
+
+;; ───────────────────────── campaign / pledge agreement ─────────────────────────
+
+(def ^:private passthrough-campaign
+  (assoc (fx/a-campaign) :campaign/pricing-model :deposit-plus-settlement))
+
+(deftest a-passthrough-pledge-without-a-quote-has-no-cap-at-all
+  (testing "which is the unbounded commitment this namespace exists to prevent"
+    (let [ps [(fx/a-pledge "p1") (fx/a-pledge "p2")]]
+      (is (= [:missing-quote :missing-quote]
+             (map :passthrough.error/code
+                  (sut/campaign-quote-errors passthrough-campaign ps {}))))
+      (is (= [] (sut/campaign-quote-errors passthrough-campaign ps
+                                           {"p1" q "p2" q}))))))
+
+(deftest an-invalid-quote-is-attributed-to-its-pledge
+  (let [ps   [(fx/a-pledge "p1")]
+        errs (sut/campaign-quote-errors passthrough-campaign ps
+                                        {"p1" (assoc q :quote/cap-minor 50000)})]
+    (is (some #{:cap-below-deposit} (map :passthrough.error/code errs)))
+    (is (= #{"p1"} (set (map :passthrough.error/pledge errs))))))
+
+(deftest a-quote-on-a-fixed-price-campaign-is-a-backer-who-thinks-they-have-a-cap
+  (let [ps [(fx/a-pledge "p1")]]
+    (is (= [:quote-on-fixed-price-campaign]
+           (map :passthrough.error/code
+                (sut/campaign-quote-errors (fx/a-campaign) ps {"p1" q}))))
+    (is (= [] (sut/campaign-quote-errors (fx/a-campaign) ps {})))))
+
+(deftest withdrawn-pledges-need-no-quote
+  (let [ps [(fx/a-pledge "p1" {:pledge/state :cancelled})
+            (fx/a-pledge "p2" {:pledge/state :dropped})]]
+    (is (= [] (sut/campaign-quote-errors passthrough-campaign ps {})))))
 
 (deftest cost-basis-is-order-stable-so-settlements-are-diffable
   (let [a (sut/cost-basis [(sut/cost-line {:part "b" :qty 1 :unit-minor 2 :source "s"})

@@ -193,6 +193,42 @@
                              :reconsent/rationale rationale
                              :reconsent/human? true})))
 
+(defn campaign-quote-errors
+  "[] when a campaign's pricing model and its pledges' quotes agree.
+
+  Two failures, and both are silent without this check:
+
+  - a `:deposit-plus-settlement` pledge with NO quote has no deposit, no
+    margin and — critically — no CAP. It would settle at whatever the
+    parts cost, which is the unbounded commitment this whole namespace
+    exists to prevent.
+  - a `:fixed` pledge WITH a quote is a backer who thinks they agreed to
+    a cap on a campaign that will never settle against one.
+
+  `quotes` is a map pledge-id -> quotation. Checked at the campaign level
+  because the mismatch is between a campaign-wide setting and a per-pledge
+  record; neither one alone can see it."
+  [c pledges quotes]
+  (let [model    (:campaign/pricing-model c :fixed)
+        standing (remove #(contains? #{:cancelled :dropped :refunded} (:pledge/state %))
+                         pledges)]
+    (vec
+     (if (= :deposit-plus-settlement model)
+       (mapcat (fn [p]
+                 (let [id (:pledge/id p)
+                       q  (get quotes id)]
+                   (if (nil? q)
+                     [{:passthrough.error/code   :missing-quote
+                       :passthrough.error/detail id}]
+                     (map #(assoc % :passthrough.error/pledge id)
+                          (quotation-errors q)))))
+               (sort-by :pledge/id standing))
+       (keep (fn [p]
+               (when (contains? quotes (:pledge/id p))
+                 {:passthrough.error/code   :quote-on-fixed-price-campaign
+                  :passthrough.error/detail (:pledge/id p)}))
+             (sort-by :pledge/id standing))))))
+
 (defn campaign-exposure
   "Aggregate what the creator is absorbing across every backer — the
   number that decides whether a pass-through campaign is still solvent.
