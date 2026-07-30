@@ -8,13 +8,15 @@
  :deps {;; integer split allocation with dust-to-the-first-party — the
         ;; tranche split in crowdfunding.payout. Zero custody, zero
         ;; network: that boundary is preserved all the way up.
-        io.github.kotoba-lang/pay         {:local/root "../pay"}
+        io.github.kotoba-lang/pay         {:git/url "https://github.com/kotoba-lang/pay.git"
+                                     :git/sha "6fd2874df910aefec66f4d3237887fe3372ca44b"}
         ;; escrow states/transitions, payout destinations and the
         ;; fee-schedule shape. A crowdfunding payout is a different
         ;; problem from a marketplace payout (paid before shipping, not
         ;; after), but the destination and escrow primitives are the same
         ;; ones and forking them would fork the audit story too.
-        io.github.kotoba-lang/marketplace {:local/root "../marketplace"}}
+        io.github.kotoba-lang/marketplace {:git/url "https://github.com/kotoba-lang/marketplace.git"
+                                     :git/sha "57fc7b3aedcc7d0c6ffb48ac9d4fff1bdf4c6e78"}}
  :aliases
  {:test {:extra-paths ["test"]
          :extra-deps {io.github.cognitect-labs/test-runner
