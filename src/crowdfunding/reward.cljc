@@ -18,7 +18,7 @@
 
   Amounts are integer minor units of the campaign currency. Pure: no
   clock, no network, no randomness."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 (def ^:private unlimited nil)
 

@@ -23,7 +23,7 @@
   A pledge total is `tier minimum-or-more + add-ons + shipping`, all
   integer minor units of the campaign currency. Pure: no clock, no
   network, no randomness."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [crowdfunding.campaign :as campaign]
             [crowdfunding.reward :as reward]))
 

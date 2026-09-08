@@ -5,7 +5,12 @@
  ;; no network I/O, so this library stays pure. The :local/root paths
  ;; resolve inside the monorepo checkout; a standalone fork should
  ;; override them with git coordinates.
- :deps {;; integer split allocation with dust-to-the-first-party — the
+ :deps {
+        ;; kotoba.lang.text, not clojure.string. Pinned as an explicit floor:
+        ;; tools.deps takes the NEWEST sha it is shown, so without a floor here
+        ;; this repo silently rides whatever a sibling happens to name.
+        io.github.kotoba-lang/text {:git/sha "73bdb13ae7a3d004b44bca08be03a3191157a38f"}
+       ;; integer split allocation with dust-to-the-first-party — the
         ;; tranche split in crowdfunding.payout. Zero custody, zero
         ;; network: that boundary is preserved all the way up.
         io.github.kotoba-lang/pay         {:git/url "https://github.com/kotoba-lang/pay.git"
