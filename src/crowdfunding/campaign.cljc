@@ -26,7 +26,7 @@
 
   Timestamps are ISO-8601 UTC strings, so lexicographic compare IS
   chronological compare. Pure: no clock, no network, no randomness."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 ;; ───────────────────────────── funding model ─────────────────────────────
 

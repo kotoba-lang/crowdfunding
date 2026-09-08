@@ -26,7 +26,7 @@
     one — the `marketplace.settlement/resolve-dispute` shape.
 
   Amounts are integer minor units. Pure: no clock, no network."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [crowdfunding.fee :as fee]
             [marketplace.settlement :as settle]
             [pay.core :as pay]))

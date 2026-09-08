@@ -23,7 +23,7 @@
     that decides a project failed.
 
   Pure: no clock (the caller passes `now`), no network."
-  (:require [clojure.string :as str]))
+  (:require [kotoba.lang.text :as str]))
 
 ;; ───────────────────────────── survey ─────────────────────────────
 

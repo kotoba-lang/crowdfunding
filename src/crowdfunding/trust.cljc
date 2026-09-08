@@ -25,7 +25,7 @@
   'ground truth, not self-report' rule the whole fleet's governors share.
 
   Pure: no clock, no network, no randomness."
-  (:require [clojure.string :as str]
+  (:require [kotoba.lang.text :as str]
             [crowdfunding.campaign :as campaign]
             [crowdfunding.reward :as reward]))
 
