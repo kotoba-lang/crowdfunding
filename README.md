@@ -144,8 +144,8 @@ takes it as an argument.
 ## Test
 
 ```bash
-clojure -M:test     # 134 tests, 426 assertions
-clojure -M:lint
+kbb -M:test     # 134 tests, 426 assertions
+kbb -M:lint
 ```
 
 ## Licence
