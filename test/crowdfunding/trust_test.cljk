@@ -1,5 +1,5 @@
 (ns crowdfunding.trust-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [crowdfunding.discovery :as discovery]
             [crowdfunding.fixtures :as fx]
             [crowdfunding.trust :as sut]))

@@ -1,5 +1,5 @@
 (ns crowdfunding.pledge-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [crowdfunding.campaign :as campaign]
             [crowdfunding.fixtures :as fx]
             [crowdfunding.pledge :as sut]))

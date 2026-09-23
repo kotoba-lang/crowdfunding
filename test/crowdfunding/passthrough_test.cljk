@@ -1,5 +1,5 @@
 (ns crowdfunding.passthrough-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [crowdfunding.fixtures :as fx]
             [crowdfunding.passthrough :as sut]))
 
