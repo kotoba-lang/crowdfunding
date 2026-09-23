@@ -1,5 +1,5 @@
 (ns crowdfunding.fulfillment-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [crowdfunding.fulfillment :as sut]
             [crowdfunding.payout :as payout]))
 
